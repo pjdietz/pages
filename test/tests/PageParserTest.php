@@ -7,11 +7,25 @@ use pjdietz\Pages\Test\TestCases\TestCase;
 
 class PageReaderTest extends TestCase
 {
-    public function testParsesMetadata()
+    public function testExtractsMetadata()
     {
+        $metadata = <<<JSON
+{
+    "title": "Page Title"
+}
+JSON;
+
+        $str = <<<STR
+<!-- metadata -->
+{$metadata}
+<!-- metadata end -->
+
+Content
+STR;
+
         $parser = new PageParser();
-        $page = $parser->parse("");
-        $this->assertNotNull($page);
+        $page = $parser->parse($str);
+        $this->assertEquals(json_decode($metadata), $page->metadata);
     }
 }
 
