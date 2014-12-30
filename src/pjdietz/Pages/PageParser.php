@@ -6,6 +6,14 @@ class PageParser
 {
     public $defaultContentKey = 'main';
 
+    /**
+     * Given a string, return an object containing metadata and contents.
+     *
+     * The metadata member will be an object and the contents member will be an array of named content strings.
+     *
+     * @param string $subject
+     * @return object
+     */
     public function parse($subject)
     {
         // Read and remove metadata from the subject.
