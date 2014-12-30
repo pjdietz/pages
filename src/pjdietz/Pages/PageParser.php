@@ -4,13 +4,25 @@ namespace pjdietz\Pages;
 
 class PageParser
 {
+    public $defaultContentKey = 'main';
+
     public function parse($subject)
     {
+        // Read and remove metadata from the subject.
         $metadata = $this->extractMetadata($subject);
+
+        // Decode the metadata.
         $metadata = $this->decodeMetadata($metadata);
 
+        // Read and remove named content sections from the subject.
         $content = $this->extractContent($subject);
 
+        // Set the default content to the remainder of the subject.
+        if (!isset($content[$this->defaultContentKey])) {
+            $content[$this->defaultContentKey] = $subject;
+        }
+
+        // Return an object containing metadata and content.
         return (object) [
             "metadata" => $metadata,
             "content" => $content

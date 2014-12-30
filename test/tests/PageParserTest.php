@@ -28,7 +28,7 @@ STR;
         $this->assertEquals(json_decode($metadata), $page->metadata);
     }
 
-    public function testExtractsContent()
+    public function testExtractsNamedContent()
     {
         $str = <<<STR
 <!-- metadata -->
@@ -48,12 +48,56 @@ Side
 STR;
 
         $content = [
-            "main" => "Main\n",
-            "side" => "Side\n"
+            "main" => "Main",
+            "side" => "Side"
         ];
 
         $parser = new PageParser();
         $page = $parser->parse($str);
+
+        // Remove white space from each content.
+        array_walk($page->content, function (&$value) {
+                $value = trim($value);
+            });
+
+        $this->assertEquals($content, $page->content);
+    }
+
+    public function testExtractsRemainingContent()
+    {
+        $str = <<<STR
+<!-- metadata -->
+{
+    "title": "Page Title"
+}
+<!-- metadata end -->
+
+<!-- section:left -->
+Left
+<!-- section:left end -->
+
+<!-- section:right -->
+Right
+<!-- section:right end -->
+
+Main
+
+STR;
+
+        $content = [
+            "main" => "Main",
+            "left" => "Left",
+            "right" => "Right",
+        ];
+
+        $parser = new PageParser();
+        $page = $parser->parse($str);
+
+        // Remove white space from each content.
+        array_walk($page->content, function (&$value) {
+                $value = trim($value);
+            });
+
         $this->assertEquals($content, $page->content);
     }
 }
