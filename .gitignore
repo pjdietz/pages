@@ -1,0 +1,13 @@
+# Composer
+vendor/
+
+# Generated documentation
+docs/
+report/
+
+# OSX
+.DS_Store
+.AppleDouble
+
+# PhpStorm
+workspace.xml
